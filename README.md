@@ -1,1 +1,1 @@
-# simple gql api. Core
+# Simple gql api.
