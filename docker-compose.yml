@@ -1,0 +1,51 @@
+version: '3.7'
+
+services:
+  graphql-boilerplate:
+    container_name: graphql-boilerplate
+    image: golang:1.13-alpine
+    volumes:
+      - .:/go/src/graphql-boilerplate
+    working_dir: /go/src/graphql-boilerplate
+    command: [
+      "go",
+      "run",
+      "main.go"
+    ]
+    depends_on:
+      - postgres
+    environment:
+      DB_HOST: ${DB_HOST} # скопируй имя сервиса постгри
+      DB_NAME: ${DB_NAME}
+      DB_USER: ${DB_USER}
+      DB_PASSWORD: ${DB_PASSWORD}
+      DB_PORT: ${DB_PORT}
+      PG_WAIT_TIME: ${PG_WAIT_TIME}
+      APP_PORT: ${APP_INNER_PORT}
+    ports:
+      - "${APP_OUTER_PORT}:${APP_INNER_PORT}"
+
+  postgres:
+    container_name: ${DB_HOST}
+    image: postgres:alpine
+    ports:
+      - "${DB_PORT}:${DB_PORT}"
+    environment:
+      POSTGRES_DB: ${DB_NAME}
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+
+  migrator:
+    container_name: migrator
+    image: alpine
+    environment:
+      DB_HOST: "postgres" # скопируй имя сервиса постгри
+      DB_NAME: ${DB_NAME}
+      DB_USER: ${DB_USER}
+      DB_PASSWORD: ${DB_PASSWORD}
+      DB_PORT: ${DB_PORT}
+      PG_WAIT_TIME: ${PG_WAIT_TIME}
+    volumes:
+      - ./migrator:/migrator
+      - ./migrations:/migrations
+    command: /bin/sh /migrator/run.sh

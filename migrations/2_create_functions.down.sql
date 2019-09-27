@@ -1,0 +1,1 @@
+DROP function if exists list_articles;
