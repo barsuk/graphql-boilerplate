@@ -4,7 +4,7 @@ go 1.13
 
 require (
 	github.com/cockroachdb/apd v1.1.0 // indirect
-	github.com/gin-gonic/gin v1.4.0
+	github.com/gin-gonic/gin v1.7.0
 	github.com/graphql-go/graphql v0.7.8
 	github.com/jackc/fake v0.0.0-20150926172116-812a484cc733 // indirect
 	github.com/jackc/pgx v3.5.0+incompatible
